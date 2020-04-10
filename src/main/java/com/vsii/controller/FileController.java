@@ -1,8 +1,11 @@
 package com.vsii.controller;
 
+import com.vsii.message.request.LoginForm;
+import com.vsii.message.response.JwtResponse;
 import com.vsii.model.DBFile;
 import com.vsii.model.Mail;
 import com.vsii.payload.UploadFileResponse;
+import com.vsii.security.services.UserPrinciple;
 import com.vsii.service.DBFileStorageService;
 import com.vsii.service.MailService;
 import com.vsii.service.UserService;
@@ -14,6 +17,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -23,11 +27,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 public class FileController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
 
     @Autowired
     private MailService mailService;
@@ -39,9 +46,7 @@ public class FileController {
 
     @PostMapping("/uploadFile")
     public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
-//        if (file.getSize() > 10048576){
-//
-//        }
+
         DBFile dbFile = dbFileStorageService.storeFile(file);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
