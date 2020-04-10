@@ -3,6 +3,7 @@ package com.vsii.service;
 import com.vsii.Exception.FileStorageException;
 import com.vsii.Exception.MyFileNotFoundException;
 import com.vsii.model.DBFile;
+import com.vsii.model.User;
 import com.vsii.repository.DBFileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,5 +40,9 @@ public class DBFileStorageService {
     public DBFile getFile(String fileId) {
         return dbFileRepository.findById(fileId)
                 .orElseThrow(() -> new MyFileNotFoundException("File not found with id " + fileId));
+    }
+
+    public Iterable<DBFile> findAll() {
+        return dbFileRepository.findAll();
     }
 }
