@@ -1,8 +1,11 @@
 package com.vsii.controller;
 
 import com.vsii.model.DBFile;
+import com.vsii.model.Mail;
 import com.vsii.payload.UploadFileResponse;
 import com.vsii.service.DBFileStorageService;
+import com.vsii.service.MailService;
+import com.vsii.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,12 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class FileController {
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private MailService mailService;
+
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
     @Autowired
@@ -36,6 +45,13 @@ public class FileController {
                 .path("/downloadFile/")
                 .path(dbFile.getId())
                 .toUriString();
+
+        Mail mail = new Mail();
+        mail.setMailFrom("phinamh@gmail.com");
+        mail.setMailTo("phinamh@gmail.com");
+        mail.setMailSubject("[User Management] Upload file");
+        mail.setMailContent("Upload file successfully !");
+        mailService.sendEmail(mail);
 
         return new UploadFileResponse(dbFile.getFileName(), fileDownloadUri,
                 file.getContentType(), file.getSize());
