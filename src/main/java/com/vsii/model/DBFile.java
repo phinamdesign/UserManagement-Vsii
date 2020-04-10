@@ -3,6 +3,7 @@ package com.vsii.model;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "files")
@@ -16,6 +17,10 @@ public class DBFile {
 
     private String fileType;
 
+    private Long size;
+
+    private Date uploadTime;
+
     @Lob
     private byte[] data;
 
@@ -23,9 +28,11 @@ public class DBFile {
 
     }
 
-    public DBFile(String fileName, String fileType, byte[] data) {
+    public DBFile(String fileName, String fileType, Date uploadTime, Long size, byte[] data) {
         this.fileName = fileName;
         this.fileType = fileType;
+        this.uploadTime = uploadTime;
+        this.size = size;
         this.data = data;
     }
 
@@ -47,6 +54,22 @@ public class DBFile {
 
     public String getFileType() {
         return fileType;
+    }
+
+    public Date getUploadTime() {
+        return uploadTime;
+    }
+
+    public void setUploadTime(Date uploadTime) {
+        this.uploadTime = uploadTime;
+    }
+
+    public Long getSize() {
+        return size;
+    }
+
+    public void setSize(Long size) {
+        this.size = size;
     }
 
     public void setFileType(String fileType) {

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.util.Date;
 
 @Service
 public class DBFileStorageService {
@@ -26,7 +27,8 @@ public class DBFileStorageService {
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
             }
 
-            DBFile dbFile = new DBFile(fileName, file.getContentType(), file.getBytes());
+            Date uploadTime = new Date();
+            DBFile dbFile = new DBFile(fileName, file.getContentType(), uploadTime,file.getSize(), file.getBytes());
 
             return dbFileRepository.save(dbFile);
         } catch (IOException ex) {
